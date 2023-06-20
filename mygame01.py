@@ -2,6 +2,14 @@
 """Driving a simple game framework with
    a dictionary object | Alta3 Research"""
 
+# read rooms text file that is a map/dictionary
+# linking a room to other rooms in the mansion
+
+with open('rooms.txt', 'r') as file:
+    map = file.read()
+
+rooms = eval(map)
+
 def showInstructions():
     """Show the game instructions when called"""
     #print a main menu and the commands
@@ -14,7 +22,7 @@ def showInstructions():
     ''')
     print("Get to the Garden with a key and a potion to win! Avoid the monsters!")
 
-def showStatus():
+def showStatus(currentRoom, inventory):
     """determine the current status of the player"""
     # print the player's current location
     print('---------------------------')
@@ -26,90 +34,67 @@ def showStatus():
       print('You see a ' + rooms[currentRoom]['item'])
     print("---------------------------")
 
+def main():
+    # an inventory, which is initially empty
+    inventory = []
 
-# an inventory, which is initially empty
-inventory = []
+    # start the player in the Hall
+    currentRoom = 'Hall'
+    showInstructions()
 
-# a dictionary linking a room to other rooms
+    # breaking this while loop means the game is over
+    while True:
+        showStatus(currentRoom, inventory)
 
-rooms = {
+        # the player MUST type something in
+        # otherwise input will keep asking
+        move = ''
+        while move == '':  
+            move = input('>')
 
-            'Hall' : {
-                  'south' : 'Kitchen',
-                  'east'  : 'Dining Room',
-                  'north' : 'Living Room',
-                  'item'  : 'key'
-                },
+        # normalizing input:
+        # .lower() makes it lower case, .split() turns it to a list
+        # therefore, "get golden key" becomes ["get", "golden key"]          
+        move = move.lower().split(" ", 1)
 
-            'Kitchen' : {
-                  'north' : 'Hall',
-                  'item'  : 'monster',
-                },
-            'Dining Room' : {
-                  'west'  : 'Hall',
-                  'south' : 'Garden',
-                  'item'  : 'potion'
-                },
-            'Garden' : {
-                  'north' : 'Dining Room'
-                },
-            'Living Room' : {
-                  'south' : 'Hall',
-                  'item'  : 'knife'
-            }
-          }
+        #if they type 'go' first
+        if move[0] == 'go':
+            #check that they are allowed wherever they want to go
+            if move[1] in rooms[currentRoom]:
+                #set the current room to the new room
+                currentRoom = rooms[currentRoom][move[1]]
+            # if they aren't allowed to go that way:
+            else:
+                print('You can\'t go that way!')
 
+        #if they type 'get' first
+        if move[0] == 'get' :
+            # make two checks:
+            # 1. if the current room contains an item
+            # 2. if the item in the room matches the item the player wishes to get
+            if "item" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']:
+                #add the item to their inventory
+                inventory.append(move[1])
+                #display a helpful message
+                print(move[1] + ' got!')
+                #delete the item key:value pair from the room's dictionary
+                del rooms[currentRoom]['item']
+            # if there's no item in the room or the item doesn't match
+            else:
+                #tell them they can't get it
+                print('Can\'t get ' + move[1] + '!')
 
-# start the player in the Hall
-currentRoom = 'Hall'
-showInstructions()
+        ## If a player enters a room with a monster without the knife
+        if 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
+            if 'knife' in inventory:
+                print("There's a monster! You were able to stab it and get away.")
+            else:
+                print('A monster has got you... GAME OVER!')
+                break
+        ## If a player gets the right items and ends up in the garden...
+        if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
+            print("You escaped the house with the ultra rare key and magic potion...YOU WIN!")
+            break
 
-# breaking this while loop means the game is over
-while True:
-    showStatus()
-
-    # the player MUST type something in
-    # otherwise input will keep asking
-    move = ''
-    while move == '':  
-        move = input('>')
-
-    # normalizing input:
-    # .lower() makes it lower case, .split() turns it to a list
-    # therefore, "get golden key" becomes ["get", "golden key"]          
-    move = move.lower().split(" ", 1)
-
-    #if they type 'go' first
-    if move[0] == 'go':
-        #check that they are allowed wherever they want to go
-        if move[1] in rooms[currentRoom]:
-            #set the current room to the new room
-            currentRoom = rooms[currentRoom][move[1]]
-        # if they aren't allowed to go that way:
-        else:
-            print('You can\'t go that way!')
-
-    #if they type 'get' first
-    if move[0] == 'get' :
-        # make two checks:
-        # 1. if the current room contains an item
-        # 2. if the item in the room matches the item the player wishes to get
-        if "item" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']:
-            #add the item to their inventory
-            inventory.append(move[1])
-            #display a helpful message
-            print(move[1] + ' got!')
-            #delete the item key:value pair from the room's dictionary
-            del rooms[currentRoom]['item']
-        # if there's no item in the room or the item doesn't match
-        else:
-            #tell them they can't get it
-            print('Can\'t get ' + move[1] + '!')
-
-        ## If a player enters a room with a monster
-    if 'item' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['item']:
-        print('A monster has got you... GAME OVER!')
-        break
-    if currentRoom == 'Garden' and 'key' in inventory and 'potion' in inventory:
-        print("You escaped the house with the ultra rare key and magic potion...YOU WIN!")
-        break
+if __name__ == "__main__":
+    main()
