@@ -3,6 +3,7 @@
 
 # JSON is part of the Python Standard Library
 import json
+from prettyprinter import pprint
 
 def main():
     """runtime code"""
@@ -11,13 +12,15 @@ def main():
       {"name": "Arthur Dent", "species": "Human"}]
 
     ## display our Python data (a list containing two dictionaries)
-    print(hitchhikers)
+    print("Type: ", type(hitchhikers))
+    pprint(hitchhikers)
 
     ## Create the JSON string
     jsonstring = json.dumps(hitchhikers)
 
     ## Display a single string of JSON
-    print(jsonstring)
+    print("Type: ", type(jsonstring))
+    pprint(jsonstring)
 
 if __name__ == "__main__":
     main()
