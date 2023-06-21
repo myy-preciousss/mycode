@@ -32,7 +32,10 @@ def main():
     pprint(people)
 
     ## display the people in the ISS
-    
+    print ('\n\nPeople in the ISS')
+    for iss in people:
+        if iss['craft'] == 'ISS':
+            print(iss['name'], "on the",  iss['craft'])
 
 if __name__ == "__main__":
     main()
