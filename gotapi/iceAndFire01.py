@@ -4,6 +4,7 @@
 # https://anapioficeandfire.com/Documentation
 
 import requests
+from prettyprinter import pprint
 
 AOIF = "https://www.anapioficeandfire.com/api"
 
@@ -15,12 +16,12 @@ def main():
     got_dj = gotresp.json()
 
     ## print the response
-    print(got_dj)
+    pprint(got_dj)
     
     ## display only the keys within
     ## the dictionary by using dict.keys()
     ## great for seeing what keys are available for lookup
-    print(got_dj.keys())
+    print("\n", got_dj.keys())
     
 
 if __name__ == "__main__":
