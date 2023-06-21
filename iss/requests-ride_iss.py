@@ -4,6 +4,7 @@
 
 # notice we no longer need to import urllib.request or json
 import requests
+from prettyprinter import pprint
 
 ## Define URL
 MAJORTOM = 'http://api.open-notify.org/astros.json'
@@ -24,11 +25,11 @@ def main():
 
     ## display our Pythonic data
     print("\n\nConverted Python data")
-    print(helmetson)
+    pprint(helmetson)
 
     print('\n\nPeople in Space: ', helmetson['number'])
     people = helmetson['people']
-    print(people)
+    pprint(people)
 
     ## display the people in the ISS
     
