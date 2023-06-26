@@ -1,11 +1,17 @@
 #!/usr/bin/python3
 
 import requests
+import os
+from prettyprinter import pprint
 
 # define the URL we want to use
 TIMEURL = "http://date.jsontest.com"
 IPURL = "http://ip.jsontest.com"
 VALIDURL = "http://validate.jsontest.com/"
+
+# for text file location
+cwd = os.getcwd()
+servers = cwd + "/jsontest/myservers.txt"
 
 def main():
     ## PART A
@@ -30,7 +36,7 @@ def main():
 
     ## PART C
     ## read a list of hosts out of a flat file
-    with open("/home/student/mycode/jsontest/myservers.txt") as myfile:
+    with open(servers) as myfile:
         mysvrs = myfile.readlines()
 
     ## PART D
@@ -57,7 +63,7 @@ def main():
     respjson = resp.json()
 
     # display our PYTHONIC data (LIST / DICT)
-    print(respjson)
+    pprint(respjson)
 
     # JUST display the value of "validate"
     print(f"Is your JSON valid? {respjson['validate']}")

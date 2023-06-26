@@ -14,7 +14,8 @@ def main():
     respjson = resp.json()
 
     # display our PYTHONIC data (LIST / DICT)
-    print(respjson)
+    print("Response: ", respjson)
+    print(type(respjson))
 
     # JUST display the value of "ip"
     print(f"The current WAN IP is --> {respjson['ip']}")

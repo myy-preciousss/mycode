@@ -2,6 +2,7 @@
 
 import requests
 import json
+from prettyprinter import pprint
 
 # define the URL we want to use
 GETURL = "http://validate.jsontest.com/"
@@ -15,7 +16,7 @@ def main():
     #jsonToValidate = "json=" + str(mydata).replace(" ", "")
     #jsonToValidate = f"json={ str(mydata).replace(' ', '') }"
     ## slightly different thinking
-    ## user json library to convert to legal json, then strip out whitespace
+    ## use json library to convert to legal json, then strip out whitespace
     jsonToValidate = f"json={ json.dumps(mydata).replace(' ', '') }"
 
     # use requests library to send an HTTP GET
@@ -26,7 +27,7 @@ def main():
     respjson = resp.json()
 
     # display our PYTHONIC data (LIST / DICT)
-    print(respjson)
+    pprint(respjson)
 
     # JUST display the value of "validate"
     print(f"Is your JSON valid? {respjson['validate']}")
