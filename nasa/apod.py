@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-import urllib.request
+import requests
 import json
+import os
 
 ## uncomment this import if you run in a GUI
 ## and want to open the URL in a browser
@@ -8,22 +9,22 @@ import json
 
 NASAAPI = "https://api.nasa.gov/planetary/apod?"
 
+cwd = os.getcwd()
+creds = cwd + "/creds/nasa.creds"
+
 def main():
     ## Define creds
-    with open("/home/student/nasa.creds") as mycreds:
+    with open(creds) as mycreds:
         nasacreds = mycreds.read()
 
     ## remove any "extra" new line feeds on our key
     nasacreds = "api_key=" + nasacreds.strip("\n")
-
+    # nasacreds = "api_key=DEMO_KEY"
     ## Call the webservice with our key
-    apodurlobj = urllib.request.urlopen(NASAAPI + nasacreds)
-
-    ## read the file-like object
-    apodread = apodurlobj.read()
+    apodresponse = requests.get(NASAAPI + nasacreds)
 
     ## decode JSON to Python data structure
-    apod = json.loads(apodread.decode("utf-8"))
+    apod = apodresponse.json()
 
     ## display our Pythonic data
     print("\n\nConverted Python data")
